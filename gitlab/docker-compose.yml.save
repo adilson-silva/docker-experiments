@@ -1,0 +1,28 @@
+postgresql:
+  image: sameersbn/postgresql:9.4
+  environment:
+    - DB_USER=gitlab
+    - DB_PASS=secretpassword
+    - DB_NAME=gitlabhq_production 
+  volumes:
+    - /opt/postgresql/data:/var/lib/postgresql
+gitlab:
+  image: sameersbn/gitlab:7.9.4
+  environment:
+    - SMTP_USER=USER@gmail.com
+    - SMTP_PASS=PASSWORD
+#    - GITLAB_HOST=git.local.host
+#    - GITLAB_EMAIL=gitlab@local.host
+    - OAUTH_GITHUB_API_KEY=3d83d3454ed74b6bdb9a
+    - OAUTH_GITHUB_APP_SECRET=d5c2c656ed7fb53fe9ebab7fa03de5e2ed1ce518
+  links:
+    - redis:redisio
+    - postgresql:postgresql
+  volumes:
+    - /opt/lab/data:/home/git/data
+  ports:
+    - "10080:80"
+    - "10022:22"
+    - "3333:3333"
+redis:
+  image: sameersbn/redis:latest
